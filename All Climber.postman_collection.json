@@ -1,0 +1,113 @@
+{
+	"info": {
+		"_postman_id": "7287c9fb-b654-43a3-be11-8786ee2390c7",
+		"name": "All Climber",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20533696"
+	},
+	"item": [
+		{
+			"name": "routes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{SERVER-URL}}/routes",
+					"host": [
+						"{{SERVER-URL}}"
+					],
+					"path": [
+						"routes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "routes",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"grade\": \"purple\",\n    \"sectorName\": \"B\",\n    \"placeId\": \"d2sphA21gbqPjJCuFa8R\",\n    \"routeName\": \"더플 꿀보라6\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{SERVER-URL}}/routes",
+					"host": [
+						"{{SERVER-URL}}"
+					],
+					"path": [
+						"routes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "places",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{SERVER-URL}}/places",
+					"host": [
+						"{{SERVER-URL}}"
+					],
+					"path": [
+						"places"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{SERVER-URL}}/users",
+					"host": [
+						"{{SERVER-URL}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "SERVER-URL",
+			"value": "localhost:3000"
+		}
+	]
+}
