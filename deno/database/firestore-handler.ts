@@ -3,6 +3,8 @@ import {
     getFirestore, 
     collection, 
     getDocs,
+    setDoc,
+    addDoc,
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-lite.js";
 import { Context } from "https://deno.land/x/oak@v7.7.0/mod.ts";
 
@@ -27,10 +29,57 @@ const app = initializeApp(firebaseConfig);
 // Firestore 인스턴스 생성
 const db = getFirestore(app);
 
+const getCollections = async (context: Context, collectionName: string, subCollectionName: string = undefined) => {
+    try {
+        const mainCollectionSnapshot = await getDocs(collection(db, collectionName));
+        const dataList = await Promise.all(mainCollectionSnapshot.docs.map(async (doc) => {
+            const data = doc.data();
+            const subCollectionRef = collection(db, `${collectionName}/${doc.id}/${subCollectionName}`);
+            const subCollectionSnapshot = await getDocs(subCollectionRef);
+            
+            // 서브 컬렉션의 문서들을 배열로 변환
+            const subCollectionData = subCollectionSnapshot.docs.map(subDoc => subDoc.data());
+            
+            // 메인 데이터에 서브 컬렉션 데이터 추가
+            if (subCollectionName) {
+                return { ...data, [subCollectionName]: subCollectionData };
+            } 
+            else {
+                return { ...data };
+            }
+        }));
+
+        context.response.body = dataList;
+        context.response.type = "json";
+    } catch (error) {
+        context.response.status = 500;
+        context.response.body = { message: error.message };
+    }
+};
+
+
 export const getRoutes = async(context: Context) => {
-    const routeCol = collection(db, 'route');
-    const routeSnapshot = await getDocs(routeCol);
-    const routeList = routeSnapshot.docs.map(doc => doc.data());
-    context.response.body = routeList;
-    context.response.type = "json";
+    await getCollections(context, 'routes'); // todo make firestore schema
+}
+
+export const getPlaces = async(context: Context) => {
+    await getCollections(context, 'place'); // todo modify collection name
+}
+
+export const getUsers = async(context: Context) => {
+    await getCollections(context, 'user', 'completeRoutes'); // todo modify collection name
+}
+
+export const addRoutes = async(context: Context) => {
+    try {
+        const body = await context.request.body().value;
+        const docRef = await addDoc(collection(db, "routes"), body);
+    
+        context.response.status = 201;
+        context.response.type = 'json';
+        context.response.body = { message: 'Added document', id: docRef.id };
+    } catch (error) {
+        context.response.status = 500;
+        context.response.body = { message: error.message };
+    }
 }
