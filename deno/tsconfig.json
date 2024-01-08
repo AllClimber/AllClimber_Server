@@ -1,0 +1,8 @@
+{
+    "compilerOptions": {
+      "noEmit": true,
+      "allowImportingTsExtensions": true
+      // 다른 컴파일러 옵션들...
+    }
+}
+  
